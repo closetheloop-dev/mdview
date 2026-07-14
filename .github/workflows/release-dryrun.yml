@@ -1,0 +1,44 @@
+# Release rehearsal: manually triggered with a version input. Runs the exact
+# release pipeline — cross-compile with the injected version, smoke test,
+# package assets — but uploads the assets as workflow artifacts instead of
+# creating a release. Use it to validate the pipeline before tagging.
+name: release-dryrun
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to rehearse, including the v (e.g. v0.1.0)"
+        required: true
+
+jobs:
+  dryrun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Cross-compile all platform binaries
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          target: export
+          build-args: |
+            VERSION=${{ inputs.version }}
+          outputs: type=local,dest=./out
+
+      - name: Smoke test injected version
+        run: |
+          ./out/linux-x64/mdview --version | grep -F "${{ inputs.version }}"
+          ./out/linux-x64/mdview demo.md | head -20
+
+      - name: Package release assets
+        env:
+          VERSION: ${{ inputs.version }}
+        run: bash scripts/package-binaries.sh "$VERSION"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-assets
+          path: assets/

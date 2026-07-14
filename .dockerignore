@@ -1,0 +1,10 @@
+# Only package.json/bun.lock/tsconfig/biome.jsonc, src/, and tests/ are
+# COPY'd by the Dockerfile; keep the context minimal and cache-friendly.
+node_modules/
+dist/
+out/
+assets/
+.git/
+.github/
+README.md
+demo.md
