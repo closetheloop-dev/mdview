@@ -1,6 +1,6 @@
 {
   "name": "mdview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Terminal markdown pager, compiled to a self-contained binary with Bun",
   "type": "module",
   "scripts": {

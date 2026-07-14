@@ -1,9 +1,17 @@
 # Release: push a tag v<x.y.z> (matching package.json "version") to build all
 # platform binaries, package them (scripts/package-binaries.sh), and create a
-# GitHub release with the tar.gz archives + SHA256SUMS.txt attached.
+# DRAFT GitHub release with the tar.gz archives + SHA256SUMS.txt attached.
 #
 # Flow: bump "version" in package.json -> commit -> git tag v<x.y.z> ->
-# git push --tags. The first step hard-fails on tag/version mismatch.
+# git push origin v<x.y.z>. The first step hard-fails on tag/version
+# mismatch. When the draft appears under Releases, write the notes and click
+# "Publish release" (publishing does not re-trigger this workflow — the tag
+# already exists).
+#
+# The repo uses immutable releases: assets can only be attached while the
+# release is still a draft, and a published release's tag can never be
+# reused. So do NOT publish via the "Create new release" button — that
+# publishes an empty, permanently asset-less release and burns the version.
 #
 # The release step (softprops/action-gh-release) authenticates with the
 # built-in GITHUB_TOKEN, which needs the "contents: write" permission below.
@@ -48,7 +56,8 @@ jobs:
       - name: Package release assets
         run: bash scripts/package-binaries.sh "$GITHUB_REF_NAME"
 
-      - name: Create GitHub release and attach assets
+      - name: Create draft release and attach assets
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
+          draft: true
           files: assets/*
