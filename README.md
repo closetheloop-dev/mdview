@@ -8,7 +8,9 @@ Written in TypeScript, built with [Bun](https://bun.sh).
 ## Install
 
 Download the archive for your platform (`linux-x64`, `linux-arm64`,
-`darwin-x64`, `darwin-arm64`) from the releases page, verify, and extract:
+`darwin-x64`, `darwin-arm64`) from the
+[releases page](https://github.com/closetheloop-dev/mdview/releases), verify,
+and extract:
 
 ```sh
 sha256sum -c SHA256SUMS.txt --ignore-missing    # Linux
