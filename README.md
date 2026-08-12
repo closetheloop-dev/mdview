@@ -7,7 +7,23 @@ Written in TypeScript, built with [Bun](https://bun.sh).
 
 ## Install
 
-Download the archive for your platform (`linux-x64`, `linux-arm64`,
+On Linux or macOS (x64 or arm64), install the latest release into
+`~/.local/bin` with:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/closetheloop-dev/mdview/main/scripts/install.sh | bash
+```
+
+The script detects your platform, verifies the checksum, and installs a
+self-contained `mdview` binary. Set `MDVIEW_VERSION` to pin a tag (e.g.
+`v0.1.2`) or `MDVIEW_INSTALL_DIR` to install elsewhere. On Windows, run it
+inside [WSL](https://learn.microsoft.com/windows/wsl/install) — it installs
+the appropriate Linux build (see [Windows (WSL)](#windows-wsl) below for the
+filesystem caveat).
+
+### Manual
+
+Or download the archive for your platform (`linux-x64`, `linux-arm64`,
 `darwin-x64`, `darwin-arm64`) from the
 [releases page](https://github.com/closetheloop-dev/mdview/releases), verify,
 and extract:
